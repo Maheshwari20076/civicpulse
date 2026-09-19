@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}CivicPulse — from citizen reports to city intelligence{% endblock %}
+
+{% block body %}
+<section class="hero">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <p class="eyebrow mb-2">Civic intelligence platform</p>
+        <h1 class="mb-3">From citizen reports to city intelligence.</h1>
+        <p class="lead mb-4">
+          Cities are not short of complaints. They are short of clarity. CivicPulse reads every
+          report, groups the ones describing the same physical problem, scores what matters most,
+          and sends it to the department that can fix it.
+        </p>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <a class="btn btn-primary btn-lg" href="{{ url_for('citizen.report') }}">Report an issue</a>
+          <a class="btn btn-outline-ink btn-lg" href="{{ url_for('auth.login') }}">Explore city intelligence</a>
+        </div>
+        <div class="pipeline">
+          <span class="step">Report</span><span class="arrow">&rarr;</span>
+          <span class="step">AI understanding</span><span class="arrow">&rarr;</span>
+          <span class="step">Cluster</span><span class="arrow">&rarr;</span>
+          <span class="step">Priority</span><span class="arrow">&rarr;</span>
+          <span class="step">Department</span><span class="arrow">&rarr;</span>
+          <span class="step">Resolution</span>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <!-- The one bold moment on this page: eight scattered reports collapsing
+             into a single civic problem. -->
+        <div class="collapse-demo">
+          <div class="small muted mb-2">Eight people reported this separately</div>
+          <div class="report-dots">
+            {% for n in range(8) %}
+              <i style="animation-delay: {{ n * 70 }}ms">{{ n + 1 }}</i>
+            {% endfor %}
+          </div>
+          <div class="collapse-arrow">CivicPulse reads all eight and finds one problem &darr;</div>
+          <div class="merged-issue">
+            <div class="d-flex align-items-center gap-3">
+              <div class="pri-ring critical" style="--pct:91"><span>91</span></div>
+              <div>
+                <div class="fw-bold">Pothole near Central Bus Stand</div>
+                <div class="issue-meta">CP-1001 &middot; Road Infrastructure</div>
+                <div class="d-flex flex-wrap gap-2 mt-2">
+                  <span class="cluster-pill">8 citizen reports</span>
+                  <span class="badge-pri critical">Critical</span>
+                  <span class="badge-status verified">AI Verified</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-6 col-lg-3">
+        <div class="stat-value" data-count="{{ stats.reports }}">0</div>
+        <div class="stat-label">Citizen reports received</div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-value" data-count="{{ stats.active }}">0</div>
+        <div class="stat-label">Active civic issues</div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-value" data-count="{{ stats.resolved }}">0</div>
+        <div class="stat-label">Issues resolved</div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-value" data-count="{{ stats.rate }}" data-suffix="%">0</div>
+        <div class="stat-label">Resolution rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="mb-4">How a report becomes action</h2>
+    <div class="row g-4">
+      {% set steps = [
+        ('Report', 'A citizen sends a photo, a description and a location. Thirty seconds of work.'),
+        ('Understand', 'The perception engine reads the description and estimates category, damage and danger.'),
+        ('Cluster', 'Distance, category and wording decide whether this is a new problem or one already known.'),
+        ('Prioritise', 'A fixed formula turns severity, risk, evidence, location, recency and support into one score.'),
+        ('Route', 'The issue lands with the department that owns that kind of work.'),
+        ('Resolve', 'Every status change is timestamped and pushed back to the people who reported it.')
+      ] %}
+      {% for name, text in steps %}
+        <div class="col-md-6 col-lg-4">
+          <div class="how-step">
+            <div class="idx">{{ loop.index }}</div>
+            <div>
+              <h3 class="mb-1" style="font-size:1rem">{{ name }}</h3>
+              <p class="mb-0 small muted">{{ text }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="mb-4">Why CivicPulse</h2>
+    <div class="row g-3">
+      {% set features = [
+        ('brain', 'Reports are read, not filed', 'Every description is analysed for category, severity, safety risk and impact before anyone sees it.'),
+        ('copy-check', 'Duplicates become evidence', 'Eight reports of one pothole stop being eight tickets and start being proof that it matters.'),
+        ('calculator', 'Priority you can audit', 'The score is computed by a fixed weighted formula, and every issue shows the arithmetic behind it.'),
+        ('git-branch', 'Routing to the right desk', 'Category maps to department automatically, and an operator can override it in one click.'),
+        ('radar', 'Patterns before failures', 'Clusters of related issues in one neighbourhood surface as an emerging infrastructure signal.'),
+        ('history', 'A trail citizens can see', 'Assignment, progress and resolution are timestamped and sent back to everyone who reported it.')
+      ] %}
+      {% for icon, title, text in features %}
+        <div class="col-md-6 col-lg-4">
+          <div class="feature">
+            <i class="ic" data-lucide="{{ icon }}"></i>
+            <h3>{{ title }}</h3>
+            <p>{{ text }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<footer class="cp-footer">
+  <div class="container d-flex flex-wrap gap-3 justify-content-between align-items-center">
+    <div>
+      <div class="fw-bold text-white">CivicPulse 2.0</div>
+      <div class="small">Turning citizen reports into actionable city intelligence.</div>
+    </div>
+    <div class="d-flex gap-3 small">
+      <a href="{{ url_for('auth.login') }}">Sign in</a>
+      <a href="{{ url_for('auth.register') }}">Create account</a>
+      <a href="{{ url_for('main.setup') }}">System status</a>
+    </div>
+  </div>
+</footer>
+{% endblock %}
